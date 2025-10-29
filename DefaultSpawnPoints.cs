@@ -129,7 +129,8 @@ namespace StickFightExtendedPlayers
             { "Factory10", new List<Vector3>() { new Vector3(0f, 0.958f, 16.069f), new Vector3(0f, 0.569f, -15.584f), new Vector3(0f, 1.402f, 9.333f), new Vector3(0f, 0.847f, -9.986f), new Vector3(0f, 3.68f, 16.153f), new Vector3(0f, 3.208f, -15.611f), new Vector3(0f, 3.944f, 9.416f), new Vector3(0f, 3.194f, -9.945f) } },
             { "Castle6", new List<Vector3>() { new Vector3(0f, 2.803f, 10.89f), new Vector3(0f, 3.025f, -10.847f), new Vector3(0f, 3.067f, 8.473f), new Vector3(0f, 3.122f, -8.402f), new Vector3(0f, 3.011f, 6.362f), new Vector3(0f, 3.261f, -6.68f), new Vector3(0f, 2.967f, 2.389f), new Vector3(0f, 3.287f, -2.486f) } },
             { "Winter4", new List<Vector3>() { new Vector3(0f, 2.639f, 3.403f), new Vector3(0f, 2.425f, -3.416f), new Vector3(0f, 2.622f, 1.306f), new Vector3(0f, 2.58f, -1.012f), new Vector3(0f, 1.592f, 9.292f), new Vector3(0f, 1.394f, -9.278f), new Vector3(0f, 1.588f, 5.514f), new Vector3(0f, 1.665f, -5.279f) } },
-            { "Castle18", new List<Vector3>() { new Vector3(0f, -1.134f, 4.389f), new Vector3(0f, -1.106f, -5.709f), new Vector3(0f, -1.036f, 2.68f), new Vector3(0f, -1.134f, -4.056f), new Vector3(0f, 6.45f, 5.986f), new Vector3(0f, 6.394f, -6.514f), new Vector3(0f, 6.325f, 2.125f), new Vector3(0f, 6.38f, -2.653f) } }
+            { "Castle18", new List<Vector3>() { new Vector3(0f, -1.134f, 4.389f), new Vector3(0f, -1.106f, -5.709f), new Vector3(0f, -1.036f, 2.68f), new Vector3(0f, -1.134f, -4.056f), new Vector3(0f, 6.45f, 5.986f), new Vector3(0f, 6.394f, -6.514f), new Vector3(0f, 6.325f, 2.125f), new Vector3(0f, 6.38f, -2.653f) } },
+            { "Intermission", new List<Vector3>() { new Vector3(0f, -4.445f, 9.431f), new Vector3(0f, -4.404f, -9.597f), new Vector3(0f, -4.334f, 6.194f), new Vector3(0f, -4.251f, -6.125f), new Vector3(0f, -4.473f, 1.542f), new Vector3(0f, -4.403f, -1.501f) } }
         };
     }
 }

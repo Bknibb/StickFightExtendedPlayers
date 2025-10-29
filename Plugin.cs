@@ -74,7 +74,8 @@ namespace StickFightExtendedPlayers
             //        if (first)
             //        {
             //            first = false;
-            //        } else
+            //        }
+            //        else
             //        {
             //            sb.Append(", ");
             //        }
@@ -105,7 +106,12 @@ namespace StickFightExtendedPlayers
                 //File.WriteAllText(Utility.CombinePaths(spawnPointsPath, $"{kvp.Key}.json"), JsonConvert.SerializeObject(kvp.Value, Formatting.Indented, new UnityVector3Converter()));
                 try
                 {
-                    Instance.Config.Bind("Spawn Points", kvp.Key, DefaultSpawnPoints.DEFAULT_SPAWN_POINTS.ContainsKey(kvp.Key) ? DefaultSpawnPoints.DEFAULT_SPAWN_POINTS[kvp.Key] : []).Value = kvp.Value.Select(vec => new Vector3((float)Math.Round(vec.x, 3), (float)Math.Round(vec.y, 3), (float)Math.Round(vec.z, 3))).ToList();
+                    var newValue = kvp.Value.Select(vec => new Vector3((float)Math.Round(vec.x, 3), (float)Math.Round(vec.y, 3), (float)Math.Round(vec.z, 3))).ToList();
+                    if (DefaultSpawnPoints.DEFAULT_SPAWN_POINTS.ContainsKey(kvp.Key) && DefaultSpawnPoints.DEFAULT_SPAWN_POINTS[kvp.Key].SequenceEqual(newValue))
+                    {
+                        continue;
+                    }
+                    Instance.Config.Bind("Spawn Points", kvp.Key, DefaultSpawnPoints.DEFAULT_SPAWN_POINTS.ContainsKey(kvp.Key) ? DefaultSpawnPoints.DEFAULT_SPAWN_POINTS[kvp.Key] : []).Value = newValue;
                 }
                 catch (Exception ex)
                 {

@@ -35,6 +35,7 @@ namespace StickFightExtendedPlayers
             return AccessTools.Method(GetNestedMoveType(), "MoveNext");
         }
         static readonly FieldInfo f_this = AccessTools.Field(GetNestedMoveType(), "$this");
+        static readonly FieldInfo f_mapIndex = AccessTools.Field(GetNestedMoveType(), "mapIndex");
         static readonly FieldInfo f_currentMapInfo = AccessTools.Field(typeof(GameManager), nameof(GameManager.currentMapInfo));
         static readonly FieldInfo f_spawnPoints = AccessTools.Field(typeof(MapInfo), nameof(MapInfo.spawnPoints));
         static readonly FieldInfo f_x = AccessTools.Field(typeof(Vector3), nameof(Vector3.x));
@@ -57,11 +58,15 @@ namespace StickFightExtendedPlayers
                 if (list[i].opcode == OpCodes.Ldfld && list[i].LoadsField(f_spawnPoints))
                 {
                     yield return list[i];
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Ldfld, f_mapIndex);
                     yield return new CodeInstruction(OpCodes.Call, m_GetWithExtraSpawnPoints);
                 }
                 else if (list[i].opcode == OpCodes.Call && list[i - 3].opcode == OpCodes.Ldstr && list[i - 3].operand is string text1 && text1 == "StartMapSequence load failed")
                 {
-                    yield return new CodeInstruction(OpCodes.Call, m_RefreshMapStatic).WithLabels(list[i].ExtractLabels());
+                    yield return new CodeInstruction(OpCodes.Ldarg_0).WithLabels(list[i].ExtractLabels());
+                    yield return new CodeInstruction(OpCodes.Ldfld, f_mapIndex);
+                    yield return new CodeInstruction(OpCodes.Call, m_RefreshMapStatic);
                     yield return list[i];
                 }
                 else if (list[i].opcode == OpCodes.Ldstr && list[i].operand is string text2 && text2 == "Trying to use invalid spawnpoint")
@@ -78,6 +83,9 @@ namespace StickFightExtendedPlayers
                     yield return new CodeInstruction(OpCodes.Ldfld, f_this);
                     yield return new CodeInstruction(OpCodes.Ldfld, f_currentMapInfo);
                     yield return new CodeInstruction(OpCodes.Ldfld, f_spawnPoints);
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Ldfld, f_mapIndex);
+                    yield return new CodeInstruction(OpCodes.Call, m_GetWithExtraSpawnPoints);
                     yield return new CodeInstruction(OpCodes.Ldlen);
                     yield return new CodeInstruction(OpCodes.Conv_I4);
                     yield return new CodeInstruction(OpCodes.Rem);
@@ -92,6 +100,9 @@ namespace StickFightExtendedPlayers
                     yield return new CodeInstruction(OpCodes.Ldfld, f_this);
                     yield return new CodeInstruction(OpCodes.Ldfld, f_currentMapInfo);
                     yield return new CodeInstruction(OpCodes.Ldfld, f_spawnPoints);
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Ldfld, f_mapIndex);
+                    yield return new CodeInstruction(OpCodes.Call, m_GetWithExtraSpawnPoints);
                     yield return new CodeInstruction(OpCodes.Ldlen);
                     yield return new CodeInstruction(OpCodes.Conv_I4);
                     yield return new CodeInstruction(OpCodes.Blt_S, ifEnd);
@@ -109,6 +120,9 @@ namespace StickFightExtendedPlayers
                     yield return new CodeInstruction(OpCodes.Ldfld, f_this);
                     yield return new CodeInstruction(OpCodes.Ldfld, f_currentMapInfo);
                     yield return new CodeInstruction(OpCodes.Ldfld, f_spawnPoints);
+                    yield return new CodeInstruction(OpCodes.Ldarg_0);
+                    yield return new CodeInstruction(OpCodes.Ldfld, f_mapIndex);
+                    yield return new CodeInstruction(OpCodes.Call, m_GetWithExtraSpawnPoints);
                     yield return new CodeInstruction(OpCodes.Ldlen);
                     yield return new CodeInstruction(OpCodes.Conv_I4);
                     yield return new CodeInstruction(OpCodes.Div);
@@ -133,9 +147,9 @@ namespace StickFightExtendedPlayers
             float magnitude = (float)Math.Ceiling(n / 2.0) * Plugin.PLAYER_SPACING;
             return (n % 2 == 1 ? -magnitude : magnitude);
         }
-        public static Transform[] GetWithExtraSpawnPoints(Transform[] normalTransforms)
+        public static Transform[] GetWithExtraSpawnPoints(Transform[] normalTransforms, MapWrapper mapIndex)
         {
-            string thisMapName = ((SingleMapUI)SpawnEditor.f_LastPlayedMap.GetValue(MapSelectionHandler.Instance)).MapName;
+            string thisMapName = SpawnEditor.GetMapName(mapIndex);
             for (int i = 0; i < Plugin.SPAWN_POINT_HOST.transform.childCount; i++)
             {
                 GameObject.Destroy(Plugin.SPAWN_POINT_HOST.transform.GetChild(i).gameObject);

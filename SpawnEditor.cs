@@ -15,6 +15,7 @@ namespace StickFightExtendedPlayers
         public bool Enabled = false;
         public bool NeedsToRefresh = false;
         public static FieldInfo f_LastPlayedMap = AccessTools.Field(typeof(MapSelectionHandler), "m_LastPlayedMap");
+        public static MapWrapper currentMapIndex = null;
         void Awake()
         {
             Instance = this;
@@ -31,7 +32,7 @@ namespace StickFightExtendedPlayers
                 {
                     Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(UnityInput.Current.mousePosition);
                     mouseWorldPos.x = 0f;
-                    string thisMapName = ((SingleMapUI)f_LastPlayedMap.GetValue(MapSelectionHandler.Instance)).MapName;
+                    string thisMapName = GetMapName(currentMapIndex);
                     if (UnityInput.Current.GetKey(KeyCode.LeftControl))
                     {
                         if (Plugin.SPAWN_POINTS.ContainsKey(thisMapName))
@@ -45,11 +46,11 @@ namespace StickFightExtendedPlayers
                         Plugin.SPAWN_POINTS[thisMapName].Add(mouseWorldPos);
                     }
                     Plugin.SaveSpawnPoints();
-                    RefreshMap();
+                    RefreshMap(currentMapIndex);
                 }
                 if (NeedsToRefresh)
                 {
-                    RefreshMap();
+                    RefreshMap(currentMapIndex);
                 }
             } else
             {
@@ -60,11 +61,20 @@ namespace StickFightExtendedPlayers
                 NeedsToRefresh = true;
             }
         }
-        public void RefreshMap()
+        public static string GetMapName(MapWrapper mapIndex)
         {
+            if (mapIndex != null && mapIndex.MapType == 0 && BitConverter.ToInt32(mapIndex.MapData, 0) == 102)
+            {
+                return "Intermission";
+            }
+            return ((SingleMapUI)f_LastPlayedMap.GetValue(MapSelectionHandler.Instance)).MapName;
+        }
+        public void RefreshMap(MapWrapper mapIndex)
+        {
+            currentMapIndex = mapIndex;
             if (!Enabled) return;
             NeedsToRefresh = false;
-            string thisMapName = ((SingleMapUI)f_LastPlayedMap.GetValue(MapSelectionHandler.Instance)).MapName;
+            string thisMapName = GetMapName(mapIndex);
             for (int i = 0; i < transform.childCount; i++)
             {
                 GameObject.Destroy(transform.GetChild(i).gameObject);
@@ -89,9 +99,9 @@ namespace StickFightExtendedPlayers
                 }
             }
         }
-        public static void RefreshMapStatic()
+        public static void RefreshMapStatic(MapWrapper mapIndex)
         {
-            Instance.RefreshMap();
+            Instance.RefreshMap(mapIndex);
         }
     }
 }
