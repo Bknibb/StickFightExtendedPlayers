@@ -28,7 +28,7 @@ namespace StickFightExtendedPlayers
     [HarmonyPatch(typeof(ControllerHandler), "CreatePlayer")]
     public class ControllerHandler_Patches_CreatePlayer
     {
-        static FieldInfo f_MAX_PLAYERS = AccessTools.Field(typeof(Plugin), nameof(Plugin.MAX_PLAYERS));
+        public static FieldInfo f_MAX_PLAYERS = AccessTools.Field(typeof(Plugin), nameof(Plugin.MAX_PLAYERS));
         static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             foreach (var instruction in instructions)

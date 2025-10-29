@@ -17,7 +17,7 @@ namespace StickFightExtendedPlayers
     {
         public const string PLUGIN_GUID = "StickFightExtendedPlayers";
         public const string PLUGIN_NAME = "StickFightExtendedPlayers";
-        public const string PLUGIN_VERSION = "1.0.0";
+        public const string PLUGIN_VERSION = "1.0.1";
         public static Plugin Instance { get; private set; }
         public static int MAX_PLAYERS = 12;
         public static Dictionary<string, Color> NEW_COLOURS = new Dictionary<string, Color>() {
@@ -42,6 +42,7 @@ namespace StickFightExtendedPlayers
             Harmony harmony = new Harmony(PLUGIN_GUID);
             harmony.PatchAll();
             harmony.PatchAll(typeof(TomlTypeConverter_Patches));
+            harmony.PatchAll(typeof(DeviceManager_Patches));
             LoadSpawnPoints();
             GameObject spawnEditor = new GameObject("SpawnEditor");
             spawnEditor.AddComponent<SpawnEditor>();
