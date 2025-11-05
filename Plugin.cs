@@ -17,7 +17,7 @@ namespace StickFightExtendedPlayers
     {
         public const string PLUGIN_GUID = "StickFightExtendedPlayers";
         public const string PLUGIN_NAME = "StickFightExtendedPlayers";
-        public const string PLUGIN_VERSION = "1.0.1";
+        public const string PLUGIN_VERSION = "1.0.2";
         public static Plugin Instance { get; private set; }
         public static int MAX_PLAYERS = 12;
         public static Dictionary<string, Color> NEW_COLOURS = new Dictionary<string, Color>() {
@@ -35,6 +35,7 @@ namespace StickFightExtendedPlayers
         public static Dictionary<string, List<Vector3>> SPAWN_POINTS;
         public static GameObject SPAWN_POINT_HOST;
         public static PropertyInfo p_OrphanedEntries = AccessTools.Property(typeof(ConfigFile), "OrphanedEntries");
+        public static List<int> AVAILABLE_LAYERS = [3, 6, 7, 13, 14, 15, 16, 17];
         private void Awake()
         {
             Instance = this;
