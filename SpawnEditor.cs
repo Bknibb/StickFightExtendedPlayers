@@ -33,20 +33,24 @@ namespace StickFightExtendedPlayers
                     Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(UnityInput.Current.mousePosition);
                     mouseWorldPos.x = 0f;
                     string thisMapName = GetMapName(currentMapIndex);
-                    if (UnityInput.Current.GetKey(KeyCode.LeftControl))
+                    if (!string.IsNullOrEmpty(thisMapName))
                     {
-                        if (Plugin.SPAWN_POINTS.ContainsKey(thisMapName))
+                        if (UnityInput.Current.GetKey(KeyCode.LeftControl))
                         {
-                            Plugin.SPAWN_POINTS[thisMapName].RemoveAt(Plugin.SPAWN_POINTS[thisMapName].FindIndex(spawnPoint => Vector3.Distance(new Vector3(0, spawnPoint.y, spawnPoint.z), mouseWorldPos) <= 0.25f));
-                            if (Plugin.SPAWN_POINTS[thisMapName].Count == 0) Plugin.SPAWN_POINTS.Remove(thisMapName);
+                            if (Plugin.SPAWN_POINTS.ContainsKey(thisMapName))
+                            {
+                                Plugin.SPAWN_POINTS[thisMapName].RemoveAt(Plugin.SPAWN_POINTS[thisMapName].FindIndex(spawnPoint => Vector3.Distance(new Vector3(0, spawnPoint.y, spawnPoint.z), mouseWorldPos) <= 0.25f));
+                                if (Plugin.SPAWN_POINTS[thisMapName].Count == 0) Plugin.SPAWN_POINTS.Remove(thisMapName);
+                            }
                         }
-                    } else
-                    {
-                        if (!Plugin.SPAWN_POINTS.ContainsKey(thisMapName)) { Plugin.SPAWN_POINTS.Add(thisMapName, new List<Vector3>()); }
-                        Plugin.SPAWN_POINTS[thisMapName].Add(mouseWorldPos);
+                        else
+                        {
+                            if (!Plugin.SPAWN_POINTS.ContainsKey(thisMapName)) { Plugin.SPAWN_POINTS.Add(thisMapName, new List<Vector3>()); }
+                            Plugin.SPAWN_POINTS[thisMapName].Add(mouseWorldPos);
+                        }
+                        Plugin.SaveSpawnPoints();
+                        RefreshMap(currentMapIndex);
                     }
-                    Plugin.SaveSpawnPoints();
-                    RefreshMap(currentMapIndex);
                 }
                 if (NeedsToRefresh)
                 {
@@ -67,7 +71,9 @@ namespace StickFightExtendedPlayers
             {
                 return "Intermission";
             }
-            return ((SingleMapUI)f_LastPlayedMap.GetValue(MapSelectionHandler.Instance)).MapName;
+            SingleMapUI lastMap = (SingleMapUI)f_LastPlayedMap.GetValue(MapSelectionHandler.Instance);
+            if (lastMap == null) return null;
+            return lastMap.MapName;
         }
         public void RefreshMap(MapWrapper mapIndex)
         {
@@ -87,7 +93,7 @@ namespace StickFightExtendedPlayers
                 CircleRenderer circleRenderer = circle.AddComponent<CircleRenderer>();
                 circleRenderer.Color = Color.yellow;
             }
-            if (Plugin.SPAWN_POINTS.ContainsKey(thisMapName))
+            if (!string.IsNullOrEmpty(thisMapName) && Plugin.SPAWN_POINTS.ContainsKey(thisMapName))
             {
                 foreach (var spawnPoint in Plugin.SPAWN_POINTS[thisMapName])
                 {

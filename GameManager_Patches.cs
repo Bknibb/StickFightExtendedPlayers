@@ -150,6 +150,7 @@ namespace StickFightExtendedPlayers
         public static Transform[] GetWithExtraSpawnPoints(Transform[] normalTransforms, MapWrapper mapIndex)
         {
             string thisMapName = SpawnEditor.GetMapName(mapIndex);
+            if (string.IsNullOrEmpty(thisMapName)) return normalTransforms;
             for (int i = 0; i < Plugin.SPAWN_POINT_HOST.transform.childCount; i++)
             {
                 GameObject.Destroy(Plugin.SPAWN_POINT_HOST.transform.GetChild(i).gameObject);

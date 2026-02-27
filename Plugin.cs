@@ -17,7 +17,7 @@ namespace StickFightExtendedPlayers
     {
         public const string PLUGIN_GUID = "StickFightExtendedPlayers";
         public const string PLUGIN_NAME = "StickFightExtendedPlayers";
-        public const string PLUGIN_VERSION = "1.0.3";
+        public const string PLUGIN_VERSION = "1.0.4";
         public static Plugin Instance { get; private set; }
         public static int MAX_PLAYERS = 12;
         public static Dictionary<string, Color> NEW_COLOURS = new Dictionary<string, Color>() {
